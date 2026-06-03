@@ -5,12 +5,13 @@
 
 ## 1. Uncomment the below line to pull the main branch of Apprise:
 # apprise @ git+https://github.com/caronc/apprise
+apprise @ git+https://github.com/ouyangstudio/apprise@master
 
 ## 2. Uncomment the below line instead if you wish to focus on a tag:
 # apprise @ git+https://github.com/caronc/apprise@custom-tag-or-version
 
 ## 3. The below grabs our stable version (generally the best choice):
-apprise == 1.11.0
+# apprise == 1.11.0
 
 ## Apprise API Minimum Requirements
 django
