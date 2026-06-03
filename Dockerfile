@@ -20,6 +20,12 @@ FROM base AS runtime
 COPY ./requirements.txt /etc/requirements.txt
 
 RUN set -eux && \
+    echo "Configuring apt mirror for China" && \
+        sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources && \
+        sed -i 's/security.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources || \
+        (echo "deb http://mirrors.aliyun.com/debian/ bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list && \
+         echo "deb http://mirrors.aliyun.com/debian/ bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
+         echo "deb http://mirrors.aliyun.com/debian-security/ bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list) && \
     echo "Installing nginx" && \
         apt-get update -qq && \
         DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
@@ -29,7 +35,7 @@ RUN set -eux && \
         apt-get install -y -qq \
             curl sed git && \
     echo "Installing python requirements" && \
-        pip3 install --no-cache-dir -q -r /etc/requirements.txt gunicorn supervisor && \
+        pip3 install --no-cache-dir -q -i https://pypi.tuna.tsinghua.edu.cn/simple -r /etc/requirements.txt gunicorn supervisor && \
         pip freeze && \
     echo "Cleaning up" && \
         apt-get --yes autoremove --purge && \
